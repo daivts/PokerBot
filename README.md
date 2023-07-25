@@ -1,4 +1,4 @@
 # PokerBot
 
-Create .env file
+Create .env file \n
   TOKEN = "your_token"

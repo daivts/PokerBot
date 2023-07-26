@@ -22,7 +22,6 @@ async def hand(state):
             None, True, 100, None, [first_card, second_card], False
         )
 
-
         return get_best_combination(result)
 
 

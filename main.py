@@ -29,7 +29,8 @@ class ChooseCard(StatesGroup):
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     await message.answer("Привет! Я бот для рассчета вероятности самой сильной покерной руки. "
-                         "Выберите свои карты из предложенных:", reply_markup=new_hand())
+                         "Выберите свои карты из предложенных:",
+                         reply_markup=new_hand())
 
 
 # New hand selection handler
@@ -40,16 +41,19 @@ async def choose_new_hand(message: types.Message):
 
 
 # First card selection handler
-@dp.callback_query_handler(lambda c: c.data.startswith('card '), state=ChooseCard.first_card)
+@dp.callback_query_handler(lambda c: c.data.startswith('card '),
+                           state=ChooseCard.first_card)
 async def first_card(callback_query: CallbackQuery, state: ChooseCard):
     async with state.proxy() as data:
         data['first_card'] = callback_query.data.replace('card ', '')
         await ChooseCard.next()
-        await callback_query.message.answer('Выберите масть для первой карты:', reply_markup=suits())
+        await callback_query.message.answer('Выберите масть для первой карты:',
+                                            reply_markup=suits())
 
 
 # First card suit handler
-@dp.callback_query_handler(lambda c: c.data.startswith('suit '), state=ChooseCard.first_suit)
+@dp.callback_query_handler(lambda c: c.data.startswith('suit '),
+                           state=ChooseCard.first_suit)
 async def first_suit(callback_query: CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         first_card_value = data.get('first_card', '')
@@ -57,7 +61,8 @@ async def first_suit(callback_query: CallbackQuery, state: FSMContext):
         data['first_card'] = first_card_value + first_suit
 
     await ChooseCard.next()
-    await callback_query.message.answer('Выберите вторую карту:', reply_markup=cards())
+    await callback_query.message.answer('Выберите вторую карту:',
+                                        reply_markup=cards())
 
 
 
@@ -67,7 +72,8 @@ async def second_card(callback_query: CallbackQuery, state: ChooseCard):
     async with state.proxy() as data:
         data['second_card'] = callback_query.data.replace('card ', '')
         await ChooseCard.next()
-        await callback_query.message.answer('Выберите масть для второй карты:', reply_markup=suits())
+        await callback_query.message.answer('Выберите масть для второй карты:',
+                                            reply_markup=suits())
 
 
 # Suit selection handler for the second card
@@ -79,7 +85,8 @@ async def second_suit(callback_query: CallbackQuery, state: FSMContext):
         if data['first_card'] != second_card_value + second_suit:
             data['second_card'] = second_card_value + second_suit
         else:
-            await callback_query.message.answer("Эта карта уже выбрана. Выберите другую.", reply_markup=suits())
+            await callback_query.message.answer("Эта карта уже выбрана. Выберите другую.",
+                                                reply_markup=suits())
             return
 
     await ChooseCard.next()

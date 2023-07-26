@@ -267,19 +267,23 @@ def compare_hands(result_list):
 # Print results
 def print_results(hole_cards, winner_list, result_histograms):
     float_iterations = float(sum(winner_list))
-    print("Winning Percentages:")
-    for index, hole_card in enumerate(hole_cards):
-        winning_percentage = float(winner_list[index + 1]) / float_iterations
-        if hole_card == (None, None):
-            print("(?, ?) : ", winning_percentage)
-        else:
-            print(hole_card, ": ", winning_percentage)
-    print("Ties: ", float(winner_list[0]) / float_iterations, "\n")
-    for player_index, histogram in enumerate(result_histograms):
-        print("Player" + str(player_index + 1) + " Histogram: ")
-        for index, elem in enumerate(histogram):
-            print(hand_rankings[index], ": ", float(elem) / float_iterations)
-
+    # print("Winning Percentages:")
+    # for index, hole_card in enumerate(hole_cards):
+    #     winning_percentage = float(winner_list[index + 1]) / float_iterations
+    #     if hole_card == (None, None):
+    #         print("(?, ?) : ", winning_percentage)
+    #     else:
+    #         print(hole_card, ": ", winning_percentage)
+    # print("Ties: ", float(winner_list[0]) / float_iterations, "\n")
+    # for player_index, histogram in enumerate(result_histograms):
+    #     print("Player" + str(player_index + 1) + " Histogram: ")
+    #
+    #     for index, elem in enumerate(histogram):
+    #         print(hand_rankings[index], ": ", float(elem) / float_iterations)
+    result = dict()
+    for index, elem in enumerate(result_histograms[0]):
+        result[hand_rankings[index]] = float(elem)/float_iterations
+    return result
 
 # Returns the winning percentages
 def find_winning_percentage(winner_list):

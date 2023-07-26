@@ -1,22 +1,37 @@
 import random
 
-from holdem_calc import holdem_calc, parallel_holdem_calc
+from holdem_calc import holdem_calc
 
 
 async def hand(state):
     async with state.proxy() as data:
         hand_list = list(data.values())
-        # print(hand_list)
-        firts_card, second_card, deck = hand_list
+        first_card, second_card, deck = hand_list
 
-        print(firts_card, second_card)
+        board = generate_board(deck, first_card, second_card)
+
+        result = holdem_calc.calculate(board, True, 1, None, [first_card, second_card], True)
+
+        return get_best_combination(result)
 
 
-def generate_card(num):
-    VALUES = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
-    SUITS = ["s", "h", "c", "d"]
+def get_best_combination(result):
+    normalize = {k: v for k, v in result.items() if v is not None}
+    return max(normalize, key=normalize.get)
 
-    deck = [{"value": value, "suit": suit} for value in VALUES for suit in SUITS]
+
+def generate_card(num, *args):
+    values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+    suits = ["s", "h", "c", "d"]
+
+    deck = [{"value": value, "suit": suit} for value in values for suit in suits]
+
+    excluded_cards = [{"value": card[:-1], "suit": card[-1]} for card in args]
+
+    for card in excluded_cards:
+        if card and card in deck:
+            deck.remove(card)
+
     random.shuffle(deck)
 
     def card_to_string(card):
@@ -25,13 +40,10 @@ def generate_card(num):
     return [card_to_string(deck.pop()) for _ in range(num)]
 
 
-def generate_board(deck):
+def generate_board(deck, first_card, second_card):
     if deck == 'Flop':
-        return generate_card(3)
+        return generate_card(3, first_card, second_card)
     elif deck == 'Tern':
-        return generate_card(4)
+        return generate_card(4, first_card, second_card)
     else:
-        return generate_card(5)
-
-
-print(holdem_calc.calculate(generate_board("Tern"), True, 1, None, ["As", "Ks"], True))
+        return generate_card(5, first_card, second_card)

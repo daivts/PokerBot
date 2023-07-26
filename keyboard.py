@@ -2,10 +2,14 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeybo
 
 
 def cards():
-    markup = InlineKeyboardMarkup(row_width=1)
+    markup = InlineKeyboardMarkup()
+
     values = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
-    for value in values:
-        markup.add(InlineKeyboardButton(value, callback_data=f"card {value}"))
+    row1 = [InlineKeyboardButton(value, callback_data=f"card {value}") for value in values[:7]]
+    row2 = [InlineKeyboardButton(value, callback_data=f"card {value}") for value in values[7:]]
+
+    markup.row(*row1)
+    markup.row(*row2)
 
     return markup
 

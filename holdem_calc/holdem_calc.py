@@ -64,10 +64,13 @@ def run_simulation(hole_cards, num, exact, given_board, deck, verbose):
         holdem_functions.find_winner(generate_boards, deck, hole_cards, num,
                                      board_length, given_board, winner_list,
                                      result_histograms)
-    if verbose:
-        holdem_functions.print_results(hole_cards, winner_list,
-                                       result_histograms)
-    return holdem_functions.find_winning_percentage(winner_list)
+
+    # if verbose:
+    #     holdem_functions.print_results(hole_cards, winner_list,
+    #                                    result_histograms)
+    # return holdem_functions.find_winning_percentage(winner_list)
+    result = holdem_functions.print_results(hole_cards, winner_list, result_histograms)
+    return result
 
 
 if __name__ == '__main__':

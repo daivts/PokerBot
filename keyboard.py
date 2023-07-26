@@ -31,9 +31,15 @@ def suits():
         letter = suit_mapping.get(suit, suit)
 
         if len(row1) < 2:
-            row1.append(InlineKeyboardButton(suit, callback_data=f"suit {suit} {letter}"))
+            row1.append(
+                InlineKeyboardButton(suit,
+                                     callback_data=f"suit {suit} {letter}")
+            )
         else:
-            row2.append(InlineKeyboardButton(suit, callback_data=f"suit {suit} {letter}"))
+            row2.append(
+                InlineKeyboardButton(suit,
+                                     callback_data=f"suit {suit} {letter}")
+            )
 
     markup.row(*row1)
     markup.row(*row2)

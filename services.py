@@ -9,7 +9,9 @@ async def hand(state):
 
         board = generate_board(deck, first_card, second_card)
 
-        result = holdem_calc.calculate(board, True, 1, None, [first_card, second_card], True)
+        result = holdem_calc.calculate(
+            board, True, 1, None, [first_card, second_card], True
+        )
 
         return get_best_combination(result)
 
@@ -23,7 +25,9 @@ def generate_card(num, *args):
     values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
     suits = ["s", "h", "c", "d"]
 
-    deck = [{"value": value, "suit": suit} for value in values for suit in suits]
+    deck = [
+        {"value": value, "suit": suit} for value in values for suit in suits
+    ]
 
     excluded_cards = [{"value": card[:-1], "suit": card[-1]} for card in args]
 

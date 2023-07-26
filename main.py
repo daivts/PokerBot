@@ -28,9 +28,11 @@ class ChooseCard(StatesGroup):
 # Command handler /start
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    await message.answer("Привет! Я бот для рассчета вероятности самой сильной покерной руки. "
-                         "Выберите свои карты из предложенных:",
-                         reply_markup=new_hand())
+    await message.answer(
+        "Привет! Я бот для рассчета вероятности самой сильной покерной руки. "
+        "Выберите свои карты из предложенных:",
+        reply_markup=new_hand()
+    )
 
 
 # New hand selection handler
@@ -65,9 +67,9 @@ async def first_suit(callback_query: CallbackQuery, state: FSMContext):
                                         reply_markup=cards())
 
 
-
 # Second card selection handler
-@dp.callback_query_handler(lambda c: c.data.startswith('card '), state=ChooseCard.second_card)
+@dp.callback_query_handler(lambda c: c.data.startswith('card '),
+                           state=ChooseCard.second_card)
 async def second_card(callback_query: CallbackQuery, state: ChooseCard):
     async with state.proxy() as data:
         data['second_card'] = callback_query.data.replace('card ', '')
@@ -77,7 +79,8 @@ async def second_card(callback_query: CallbackQuery, state: ChooseCard):
 
 
 # Suit selection handler for the second card
-@dp.callback_query_handler(lambda c: c.data.startswith('suit '), state=ChooseCard.second_suit)
+@dp.callback_query_handler(lambda c: c.data.startswith('suit '),
+                           state=ChooseCard.second_suit)
 async def second_suit(callback_query: CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         second_card_value = data.get('second_card', '')
@@ -85,16 +88,20 @@ async def second_suit(callback_query: CallbackQuery, state: FSMContext):
         if data['first_card'] != second_card_value + second_suit:
             data['second_card'] = second_card_value + second_suit
         else:
-            await callback_query.message.answer("Эта карта уже выбрана. Выберите другую.",
-                                                reply_markup=suits())
+            await callback_query.message.answer(
+                "Эта карта уже выбрана. Выберите другую.",
+                reply_markup=suits())
             return
 
     await ChooseCard.next()
-    await callback_query.message.answer('Выберите этап игры:', reply_markup=deck())
+    await callback_query.message.answer(
+        'Выберите этап игры:', reply_markup=deck()
+    )
 
 
 # Game stage selection handler (Flop, Turn, River) and result output
-@dp.callback_query_handler(lambda c: c.data.startswith('deck '), state=ChooseCard.deck)
+@dp.callback_query_handler(lambda c: c.data.startswith('deck '),
+                           state=ChooseCard.deck)
 async def select_deck(callback_query: CallbackQuery, state: ChooseCard):
     async with state.proxy() as data:
         step = callback_query.data.replace('deck', '')
@@ -102,8 +109,11 @@ async def select_deck(callback_query: CallbackQuery, state: ChooseCard):
 
     result = await hand(state)
 
-    await callback_query.message.answer(f"Лучшая вероятная комбинация для этапа {_(step.strip())}:\n{_(result)}",
-                                        reply_markup=new_hand())
+    await callback_query.message.answer(
+        f"Лучшая вероятная комбинация для этапа "
+        f"{_(step.strip())}:\n{_(result)}",
+        reply_markup=new_hand()
+    )
     await state.finish()
 
 

@@ -10,15 +10,18 @@ async def hand(state):
         board = generate_board(deck, first_card, second_card)
 
         result = holdem_calc.calculate(
-            board, True, 1, None, [first_card, second_card], True
+            None, True, 100, None, [first_card, second_card], False
         )
+        print(result)
 
         return get_best_combination(result)
 
 
 def get_best_combination(result):
     normalize = {k: v for k, v in result.items() if v is not None}
-    return max(normalize, key=normalize.get)
+    best_combo = max(normalize, key=normalize.get)
+    chance = normalize[best_combo] * 100
+    return best_combo, chance
 
 
 def generate_card(num, *args):

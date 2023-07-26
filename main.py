@@ -107,11 +107,11 @@ async def select_deck(callback_query: CallbackQuery, state: ChooseCard):
         step = callback_query.data.replace('deck', '')
         data['deck'] = step
 
-    result = await hand(state)
+    result, chanse = await hand(state)
 
     await callback_query.message.answer(
         f"Лучшая вероятная комбинация для этапа "
-        f"{_(step.strip())}:\n{_(result)}",
+        f"{_(step.strip())}:\n{_(result)} - {chanse:.2f}%",
         reply_markup=new_hand()
     )
     await state.finish()

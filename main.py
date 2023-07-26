@@ -10,10 +10,8 @@ from keyboard import cards, suits, new_hand, deck
 
 from lang import _
 
-# Загружаем переменные окружения из файла .env
 load_dotenv(find_dotenv())
 
-# Инициализируем хранилище и бота
 storage = MemoryStorage()
 bot = Bot(os.environ.get("TOKEN"))
 dp = Dispatcher(bot, storage=storage)
@@ -92,7 +90,6 @@ async def second_suit(callback_query: CallbackQuery, state: FSMContext):
 async def select_deck(callback_query: CallbackQuery, state: ChooseCard):
     async with state.proxy() as data:
         step = callback_query.data.replace('deck', '')
-        print(step)
         data['deck'] = step
 
     result = await hand(state)

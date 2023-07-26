@@ -9,6 +9,7 @@ lang = {
     'Four of a Kind': "Карэ",
     'Straight Flush': "Стрит-флэш",
     'Royal Flush': "Роял-флэш",
+
     'Flop': 'Флоп',
     'Tern': 'Тёрн',
     'River': 'Ривер',

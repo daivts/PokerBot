@@ -9,10 +9,19 @@ async def hand(state):
 
         board = generate_board(deck, first_card, second_card)
 
+        """If you do not pass the first parameter to the deck that is generated in this file, 
+        the generation inside the library will be used, 
+        this increases the calculation time because the montecarlo method will be started, 
+        if you pass your own deck to the call, the operation time will be reduced, 
+        but the result will be inaccurate."""
+        # result = holdem_calc.calculate(
+        #     board, True, 100, None, [first_card, second_card], False
+        # )
+        #
         result = holdem_calc.calculate(
             None, True, 100, None, [first_card, second_card], False
         )
-        print(result)
+
 
         return get_best_combination(result)
 
